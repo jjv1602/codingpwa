@@ -1,21 +1,11 @@
 import type { NextConfig } from "next";
-import nextPwa from "@ducanh2912/next-pwa";
-
-// const withPWA = require("@ducanh2912/next-pwa").default({
-//   dest: "public",
-// });
-
-// const withPWAFactory = require("@ducanh2912/next-pwa").default;
-
-
-const withPWAConfig = nextPwa({
-  dest: "public",
-});
-
-
-const nextConfig: NextConfig = {
-  /* config options here */
+import withPWA from 'next-pwa';
+const nextConfig = {
+  reactStrictMode: true,
+  
 };
-
-
-export default withPWAConfig(nextConfig);
+export default withPWA({
+    dest: "public",         // destination directory for the PWA files       // disable PWA in the development environment
+    register: true,         // register the PWA service worker
+    skipWaiting: true,      // skip waiting for service worker activation
+})(nextConfig);
