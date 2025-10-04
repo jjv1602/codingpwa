@@ -12,7 +12,8 @@ enum ContestPlatformType {
 }
 type StoreType = {
   calendarViewMode?: CalendarViewModeType | null;
-  competitionInfo?: ContestInfoResponse | null;
+  competitionMap?: ContestStructure | null;
+  contestData?: ContestInfoResponse | null;
   specificPlatformContestInfo?: string | null; // TODO
   dateFilter?: DateFilterType | null;
   contestFilter?: ContestPlatformType | null;
@@ -34,3 +35,5 @@ export type {
   DateFilterType,
   ContestPlatformType,
 };
+
+export type ContestStructure = Map<string, Map<string, ContestInfoResponse>>;

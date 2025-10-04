@@ -4,9 +4,10 @@ import { Action, DispatchType, StoreType } from "./type";
 
 const initialState: StoreType = {
   calendarViewMode: "week",
-  competitionInfo: null,
+  competitionMap: null,
   dateFilter: null,
   contestFilter: null,
+  contestData:null,
 };
 
 const StoreContext = createContext<StoreType>(initialState);

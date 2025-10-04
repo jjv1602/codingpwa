@@ -1,4 +1,9 @@
-import { timeStamp } from "console";
+export const formatDateToYYYYMMDD = (date: number) => {
+  let yourDate = new Date(date);
+  const offset = yourDate.getTimezoneOffset();
+  yourDate = new Date(yourDate.getTime() - offset * 60 * 1000);
+  return yourDate.toISOString().split("T")[0];
+};
 
 const addZero = (i: number) => {
   if (i < 10) {
@@ -19,8 +24,8 @@ export const googleFormatTimestamp = (timestamp: number) => {
   const date = new Date(timestamp);
 
   const year = date.getFullYear(); // YYYY
-  const month = String(date.getMonth() + 1).padStart(2, "0"); 
-  const day = String(date.getDate()).padStart(2, "0"); 
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   const hour = String(date.getHours()).padStart(2, "0"); // HH
   const minute = String(date.getMinutes()).padStart(2, "0"); // MM
   const second = String(date.getSeconds()).padStart(2, "0"); // SS, usually 00
