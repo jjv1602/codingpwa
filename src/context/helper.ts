@@ -8,7 +8,7 @@ export const builderFormatDataIntoMap = (
 ): ContestStructure => {
   const dateContestMap: ContestStructure = new Map();
   for (const item of data) {
-    const dateKey = formatDateToYYYYMMDD(item.startTime);
+    const dateKey = formatDateToYYYYMMDD(new Date(item.startTime));
     if (!dateContestMap.has(dateKey)) {
       dateContestMap.set(dateKey, new Map());
     }

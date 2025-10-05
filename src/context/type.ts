@@ -1,15 +1,24 @@
 import { ContestInfoResponse } from "@/api/types";
 
 type CalendarViewModeType = "week" | "day";
+
 type DateFilterType = {
   startTimestamp?: number;
   endTimestamp?: number;
 };
+
 enum ContestPlatformType {
   Leetcode = "leetcode",
   Codeforces = "codeforces",
   Codechef = "codechef",
-}
+};
+
+type DateListType = {
+  date: Date;
+  dateNumeric: string;
+  month: string;
+};
+
 type StoreType = {
   calendarViewMode?: CalendarViewModeType | null;
   competitionMap?: ContestStructure | null;
@@ -17,6 +26,8 @@ type StoreType = {
   specificPlatformContestInfo?: string | null; // TODO
   dateFilter?: DateFilterType | null;
   contestFilter?: ContestPlatformType | null;
+  baseDate?: Date;
+  selectedDate?: Date;
 };
 
 type Action = {
@@ -34,6 +45,7 @@ export type {
   CalendarViewModeType,
   DateFilterType,
   ContestPlatformType,
+  DateListType
 };
 
 export type ContestStructure = Map<string, Map<string, ContestInfoResponse>>;

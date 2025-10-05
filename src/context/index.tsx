@@ -7,7 +7,9 @@ const initialState: StoreType = {
   competitionMap: null,
   dateFilter: null,
   contestFilter: null,
-  contestData:null,
+  contestData: null,
+  baseDate: new Date(),
+  selectedDate: new Date(),
 };
 
 const StoreContext = createContext<StoreType>(initialState);

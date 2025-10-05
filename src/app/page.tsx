@@ -11,37 +11,22 @@ import Subcalendar from "@/components/Subcalendar";
 import Tabs from "@/components/Tabs";
 import { useStoreContext, useStoreDispatch } from "@/context";
 import { builderFormatDataIntoMap } from "@/context/helper";
-import { ContestStructure } from "@/context/type";
 import { formatDateToYYYYMMDD } from "@/helper";
 import Image from "next/image";
-import NoEventsFoundImage from '../../public/noEventsFound.png';
 import { Fragment, useEffect, useState } from "react";
+import NoEventsFoundImage from "../../public/noEventsFound.png";
 
 export default function Home() {
-  const { competitionMap, contestData } = useStoreContext();
+  const { competitionMap, contestData, selectedDate } = useStoreContext();
   const dispatch = useStoreDispatch();
   const getApiInfo = useRequest<void, ContestInfoResponse, ErrorResponseType>();
-  const [data, setData] = useState<ContestInfoResponse>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<ErrorResponseType>();
-  const getContestData = (
-    competitionMap: ContestStructure | null | undefined,
-    date: number,
-    contestFilter?: string
-  ) => {
-    console.log({ competitionMap });
-    if (!competitionMap) {
-      dispatch({
-        type: "STORE_STATE",
-        payload: {
-          contestData: undefined,
-        },
-      });
-      return;
-    }
-    const dateKey = formatDateToYYYYMMDD(date);
 
-    const getAllContestOfThatDate = competitionMap.get(dateKey);
+  const getContestData = (contestFilter?: string) => {
+    const dateKey = formatDateToYYYYMMDD(selectedDate as Date);
+    const getAllContestOfThatDate = competitionMap?.get(dateKey);
+    console.log({ getAllContestOfThatDate });
     if (!getAllContestOfThatDate) {
       dispatch({
         type: "STORE_STATE",
@@ -72,8 +57,13 @@ export default function Home() {
         contestData: combined,
       },
     });
+
     return;
   };
+
+  useEffect(() => {
+    getContestData();
+  }, [competitionMap, selectedDate]);
 
   useEffect(() => {
     getApiInfo.makeRequest(
@@ -85,6 +75,7 @@ export default function Home() {
   useEffect(() => {
     if (getApiInfo.apiData) {
       const updatedData = builderFormatDataIntoMap(getApiInfo.apiData);
+
       dispatch({
         type: "STORE_STATE",
         payload: {
@@ -92,12 +83,6 @@ export default function Home() {
         },
       });
       const today = new Date();
-      today.setDate(today.getDate());
-      const start = new Date(today);
-      start.setHours(0, 0, 0, 0);
-      const end = new Date(today);
-      end.setHours(23, 59, 59, 999);
-      getContestData(competitionMap, today.getDate());
     }
   }, [getApiInfo.apiData]);
 
@@ -111,13 +96,6 @@ export default function Home() {
     }
   }, [getApiInfo.error]);
 
-  const updateFilter = (timestamp: number) => {
-    console.log({ timestamp });
-    getContestData(competitionMap, timestamp);
-  };
-
- 
-
   return (
     <div className="w-[432px] h-[932px] justify-center p-4 ">
       {loading ? (
@@ -126,13 +104,19 @@ export default function Home() {
         <Fragment>
           <Heading />
           <Tabs />
-          <Subcalendar updateFilter={updateFilter} />
-          
-          {!contestData?.length  ? (
-            <div className="flex items-center justify-center flex-col">
-           <Image src={NoEventsFoundImage} alt="no events " className=" p-0" />
-           <div className="text-white">No events found for the selected date</div>
-           </div>
+          <Subcalendar />
+
+          {!contestData?.length ? (
+            <div className="flex items-center justify-center flex-col pt-[20%] gap-10">
+              <Image
+                src={NoEventsFoundImage}
+                alt="no events "
+                className=" p-0"
+              />
+              <div className="text-white text-2xl font-bold text-center mx-[5%]">
+                No events found for the selected date
+              </div>
+            </div>
           ) : (
             contestData?.map((content, index) => (
               <EventCard

@@ -1,4 +1,4 @@
-export const formatDateToYYYYMMDD = (date: number) => {
+export const formatDateToYYYYMMDD = (date:Date) => {
   let yourDate = new Date(date);
   const offset = yourDate.getTimezoneOffset();
   yourDate = new Date(yourDate.getTime() - offset * 60 * 1000);
